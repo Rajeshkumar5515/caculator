@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+    <title>Calculator</title>
+    
+    <h1>
+    Calculator
+    </h1>
+    
+    <style>
+    
+   
+    h1{
+    display:flex;
+    color:#e0071c;
+    font-family:monospace;
+    flex-direction: column;
+    align-items: center;
+    }
+        body {
+        background-color:#e1e3e3;
+            font-family: Arial, sans-serif;
+        }
+
+        .calculator {
+            width: 300px;
+
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            
+            border-radius: 8px;
+            padding: 10px;
+             box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .display {
+            height: 100px;
+            background-color: #f1f1f1;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+           
+            font-size: 25px;
+        }
+
+        .buttons {
+        height:250px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+           
+           
+        }
+
+        button {
+            padding: 10px;
+            font-size: 23px;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 15px;
+           
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color:#87898a ;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display" ></div>
+        <div class="buttons" id="buttons">
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button onclick="appendToDisplay('+')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('+')" style="color: #05b9f0;">+</button>
+            <button onclick="appendToDisplay('-')" style="color: #05b9f0;">-</button>
+            <button onclick="appendToDisplay('*')" style="color: #05b9f0;">*</button>
+            <button onclick="appendToDisplay('/')"style="color: #05b9f0;">/</button>
+            <button type="button" onclick="calculateResult()"style="background-color: #f0d405">=</button>
+            <button type="button" onclick="clearDisplay()"style="background-color: #e0071c">C</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:inline="javascript">
+        function appendToDisplay(value) {
+            var display = document.getElementById('display');
+            display.textContent += value;
+        }
+
+        function clearDisplay() {
+            var display = document.getElementById('display');
+            display.textContent = '';
+        }
+
+        function calculateResult() {
+            var display = document.getElementById('display');
+            var displayvalue = display.textContent;
+
+            $.ajax({
+                type: 'POST',
+                url: '/calculate',
+                data: displayvalue, 
+                contentType: 'text/plain', 
+                success: function (response) {
+                   
+                    display.textContent = response.result;
+                },
+                error: function () {
+                    display.textContent = 'Error';
+                    
+                    alert("Add Correct Number Format Or Opertor:")
+                }
+            });
+        }
+    </script>
+</body>
+</html>
